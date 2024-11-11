@@ -1,0 +1,43 @@
+version: "3.8"
+services:
+  java_app:
+    build: .
+    image: java-app-bank
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://sql-container:3306/bankappdb
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "Test@123"
+    networks:
+      - java-app-network
+    container_name: java-app-bank-container
+    depends_on:
+      - sql
+
+
+  sql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    networks:
+      - java-app-network
+    environment:
+      MYSQL_ROOT_PASSWORD: "Test@123"
+      MYSQL_DATABASE: "bankappdb"
+    container_name: sql-container
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+networks:
+  java-app-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+
+
+
+
+
+
